@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+	<item id="Title"><![CDATA[Discuz! Addon MD5]]></item>
+	<item id="ID"><![CDATA[csu_avatar.plugin]]></item>
+	<item id="RevisionID"><![CDATA[19353]]></item>
+	<item id="SN"><![CDATA[2013081709292Z7M7Mh3]]></item>
+	<item id="RevisionDateline"><![CDATA[1373090401]]></item>
+	<item id="Data">
+		<item id="/about.inc.php"><![CDATA[f03eb6d67ddc9dbfe3cf7e3829b42e3c]]></item>
+		<item id="/agree.inc.php"><![CDATA[4942c4a26d2ddc23f2ff1ec2b428babc]]></item>
+		<item id="/discuz_plugin_csu_avatar_SC_GBK.xml"><![CDATA[07661fdc3b97d88f4cf78b2241c63b71]]></item>
+		<item id="/discuz_plugin_csu_avatar_SC_UTF8.xml"><![CDATA[df6f8306c0a9bbd81b0cc266bdd8da1d]]></item>
+		<item id="/discuz_plugin_csu_avatar_TC_BIG5.xml"><![CDATA[784a0772bdc73352323ef826adb8df75]]></item>
+		<item id="/discuz_plugin_csu_avatar_TC_UTF8.xml"><![CDATA[e75d3706a1296f9dc19e871bf5d7f5e0]]></item>
+		<item id="/hook.class.php"><![CDATA[72fe2d358131c8911b41583036b1424e]]></item>
+	</item>
+</root>
