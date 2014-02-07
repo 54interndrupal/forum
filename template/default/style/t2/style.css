@@ -1,10 +1,10 @@
-/*
+﻿/*
 [name]青[/name]
 [iconbgcolor]#429296[/iconbgcolor]
 Powered by Discuz! X
 */
 
-body { background: #FFF url(bgimg.jpg) no-repeat 50% 0; }
+body { background: #FFF; }
 #nv { background-color: #429296; background-image: url(nv.png); }
 	#nv li, #nv li a:hover, #nv li.hover a, #nv li.hover a:hover { background-image: url(nv_a.png) !important; }
 	#nv li.a { background-color: #005D5D; }

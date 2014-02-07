@@ -3,3 +3,9 @@
 <?PHP exit;?>	1391216239	admin	1	127.0.0.1	setting	GET={operation=functions; }; POST={};
 <?PHP exit;?>	1391216241	admin	1	127.0.0.1	setting	GET={operation=access; }; POST={};
 <?PHP exit;?>	1391216268	admin	1	127.0.0.1	portalcategory	GET={}; POST={};
+<?PHP exit;?>	1391756771	admin	1	127.0.0.1		GET={}; POST={};
+<?PHP exit;?>	1391756774	admin	1	127.0.0.1	index	GET={}; POST={};
+<?PHP exit;?>	1391756780	admin	1	127.0.0.1	setting	GET={operation=basic; }; POST={};
+<?PHP exit;?>	1391756794	admin	1	127.0.0.1	tools	GET={operation=updatecache; }; POST={};
+<?PHP exit;?>	1391756801	admin	1	127.0.0.1	tools	GET={operation=updatecache; step=2; type={0=data; 1=tpl; }; confirmed=确定; }; POST={type={0=data; 1=tpl; }; confirmed=确定; };
+<?PHP exit;?>	1391756802	admin	1	127.0.0.1	tools	GET={operation=updatecache; step=3; type=data_tpl; }; POST={};
