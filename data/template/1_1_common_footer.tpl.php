@@ -1,5 +1,5 @@
 <?php if(!defined('IN_DISCUZ')) exit('Access Denied'); ?>
-	</div>
+﻿	</div>
 <?php if(empty($topic) || ($topic['usefooter'])) { $focusid = getfocus_rand($_G[basescript]);?><?php if($focusid !== null) { $focus = $_G['cache']['focus']['data'][$focusid];?><?php $focusnum = count($_G['setting']['focus'][$_G[basescript]]);?><div class="focus" id="sitefocus">
 <div class="bm">
 <div class="bm_h cl">
@@ -57,8 +57,7 @@ GMT<?php echo $_G['timenow']['offset'];?>, <?php echo $_G['timenow']['time'];?>
 </p>
 </div>
 <div id="frt">
-<p>Powered by <strong><a href="http://www.discuz.net" target="_blank">Discuz!</a></strong> <em><?php echo $_G['setting']['version'];?></em><?php if(!empty($_G['setting']['boardlicensed'])) { ?> <a href="http://license.comsenz.com/?pid=1&amp;host=<?php echo $_SERVER['HTTP_HOST'];?>" target="_blank">Licensed</a><?php } ?></p>
-<p class="xs0">&copy; 2001-2013 <a href="http://www.comsenz.com" target="_blank">Comsenz Inc.</a></p>
+<p>&copy; 2012-2014 54intern.com 实习圈 沪ICP备12010925号 </p>			
 </div><?php updatesession();?><?php if($_G['uid'] && $_G['group']['allowinvisible']) { ?>
 <script type="text/javascript">
 var invisiblestatus = '<?php if($_G['session']['invisible']) { ?>隐身<?php } else { ?>在线<?php } ?>';
