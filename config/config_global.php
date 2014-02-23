@@ -6,7 +6,7 @@ $_config = array();
 // ----------------------------  CONFIG DB  ----------------------------- //
 $_config['db']['1']['dbhost'] = 'localhost';
 $_config['db']['1']['dbuser'] = 'root';
-$_config['db']['1']['dbpw'] = '';
+$_config['db']['1']['dbpw'] = '54intern';
 $_config['db']['1']['dbcharset'] = 'utf8';
 $_config['db']['1']['pconnect'] = '0';
 $_config['db']['1']['dbname'] = 'ultrax';
