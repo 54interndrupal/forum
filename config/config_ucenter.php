@@ -6,7 +6,7 @@ define('UC_CONNECT', 'mysql');
 define('UC_DBHOST', 'localhost');
 define('UC_DBUSER', 'root');
 define('UC_DBPW', '54intern');
-define('UC_DBNAME', 'ultrax');
+define('UC_DBNAME', 'forum');
 define('UC_DBCHARSET', 'utf8');
 define('UC_DBTABLEPRE', '`ultrax`.forumucenter_');
 define('UC_DBCONNECT', 0);
