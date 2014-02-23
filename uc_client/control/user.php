@@ -35,10 +35,62 @@ class usercontrol extends base {
 		$uid = $this->input('uid');
 		if($this->app['synlogin']) {
 			if($this->user = $_ENV['user']->get_user_by_uid($uid)) {
+				$tmp="";
+				if($app['url']=="http://forum.54intern.com"){
+					$tmp="/api/uc.php";
+				}
+				
 				$synstr = '';
 				foreach($this->cache['apps'] as $appid => $app) {
 					if($app['synlogin'] && $app['appid'] != $this->app['appid']) {
-						$synstr .= '<script type="text/javascript" src="'.$app['url'].'/api/uc.php?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$this->user['username'].'&uid='.$this->user['uid'].'&password='.$this->user['password']."&time=".$this->time, 'ENCODE', $app['authkey'])).'"></script>';
+						$synstr .= '<script type="text/javascript" src="'.$app['url'].$tmp.'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$this->user['username'].'&uid='.$this->user['uid'].'&password='.$this->user['password']."&time=".$this->time, 'ENCODE', $app['authkey'])).'"></script>';
+					}
+				}
+				return $synstr;
+			}
+		}
+		return '';
+	}
+
+// -1 未开启
+	function onsynlogin2($uid,$username, $password) {
+		//$this->init_input();
+		//$uid = $this->input('uid');
+		if($this->app['synlogin']) {
+			if($this->user = $_ENV['user']->get_user_by_uid($uid)) {
+				$synstr = '';
+				foreach($this->cache['apps'] as $appid => $app) {
+					if($app['synlogin'] && $app['appid'] != $this->app['appid']) {
+						$synstr .= '<script type="text/javascript" src="'.$app['url'].'/?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$username.'&uid='.$uid.'&password='.$password."&time=".$this->time, 'ENCODE', $app['authkey'])).'"></script>';
+					}
+				}
+				return $synstr;
+			}
+		}
+		return '';
+	}
+function onsynlogin3($uid,$username, $password) {
+	$this->init_input();
+		//file_put_contents('test.txt',"bbbb");
+		
+		if($this->app['synlogin']) {
+			if($this->user = $_ENV['user']->get_user_by_uid($uid)) {
+				$synstr = '';
+				foreach($this->cache['apps'] as $appid => $app) {
+					if($app['url']!="http://forum.54intern.com"){
+						$tmplink='/';
+						if($app['url']=="http://forum.54intern.com"){
+							$tmplink='/api/';
+						} else {
+							$app['authkey']="cdcfOdA8Kze2bif8Xa5qnZVtoT89VOMg9D8uJ38";	
+						}
+						if($app['synlogin']) {
+							$synstr .= '<script type="text/javascript" src="'.$app['url'].$tmplink.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$username.'&uid='.$uid.'&password='.$password."&time=".$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
+							/* <script type="text/javascript">  var sss="||||||||||action=synlogin&username='.$username.'&uid='.$uid.'&password='.$password."&time=".$this->time."#".$app['authkey'].'";</script>'; */
+							if(is_array($app['extra']['extraurl'])) foreach($app['extra']['extraurl'] as $extraurl) {
+								$synstr .= '<script type="text/javascript" src="'.$extraurl.$tmplink.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$username.'&uid='.$uid.'&password='.$password."&time=".$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
+							}
+						}
 					}
 				}
 				return $synstr;
@@ -52,8 +104,12 @@ class usercontrol extends base {
 		if($this->app['synlogin']) {
 			$synstr = '';
 			foreach($this->cache['apps'] as $appid => $app) {
+				$tmp="";
+				if($app['url']=="http://forum.54intern.com"){
+					$tmp="/api/uc.php";
+				}
 				if($app['synlogin'] && $app['appid'] != $this->app['appid']) {
-					$synstr .= '<script type="text/javascript" src="'.$app['url'].'/api/uc.php?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogout&time='.$this->time, 'ENCODE', $app['authkey'])).'"></script>';
+					$synstr .= '<script type="text/javascript" src="'.$app['url'].$tmp.'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogout&time='.$this->time, 'ENCODE', $app['authkey'])).'"></script>';
 				}
 			}
 			return $synstr;
@@ -77,6 +133,14 @@ class usercontrol extends base {
 			return $status;
 		}
 		$uid = $_ENV['user']->add_user($username, $password, $email, 0, $questionid, $answer, $regip);
+		
+		$data = $this->db->fetch_first("SELECT salt FROM `forum`.forumucenter_members where username='$username'");
+	$salt=$data['salt'];
+$password=md5(md5($password).$salt);
+		
+		$loginjs=$this->onsynlogin3($uid,$username, $password);
+		$time=date("Y-m-d H:i:s");
+		$this->db->query("INSERT INTO `forum`.forumucenter_tongbu SET uid='$uid', uname='$username', type='login', content='$loginjs', time='$time', ip='$regip',  isfromdrupal='http://forum.54intern.com'");
 		return $uid;
 	}
 

@@ -207,6 +207,20 @@ class logging_ctl {
 		}
 
 	}
+	//add for tongbu begin
+	function on_ucsyn(){
+                global $_G;
+                
+                if($_G['uid']) {
+                        $ucsynlogin = $this->setting['allowsynlogin'] ? uc_user_synlogin($_G['uid']) : '';
+                        $url_forward = dreferer();
+                        if(strpos($url_forward, $this->setting['regname']) !== false) {
+                                $url_forward = 'forum.php';
+                        }
+                        showmessage('login_succeed', $url_forward ? $url_forward : './', array('username' => $_G['member']['username'], 'usergroup' => $_G['group']['grouptitle'], 'uid' => $_G['uid']), array('extrajs' => $ucsynlogin));
+                }
+        }
+		//add for tongbu end
 
 	function on_logout() {
 		global $_G;
@@ -823,7 +837,9 @@ class register_ctl {
 			$param = array('bbname' => $this->setting['bbname'], 'username' => $_G['username'], 'usergroup' => $_G['group']['grouptitle'], 'uid' => $_G['uid']);
 			if(strpos($url_forward, $this->setting['regname']) !== false || strpos($url_forward, 'buyinvitecode') !== false) {
 				$url_forward = 'forum.php';
-			}
+			}else{
+                                $url_forward = 'member.php?mod=logging&action=ucsyn&referer='.$url_forward; //uc syn
+                        }   //$url_forward 可以修改成 $_G['gp_referer']，同时品牌空间的注册地址需要填写为 http://discuz注册地址&referer=品牌空间地址
 			$href = str_replace("'", "\'", $url_forward);
 			$extra = array(
 				'showid' => 'succeedmessage',

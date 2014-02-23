@@ -69,6 +69,7 @@ function uc_api_post($module, $action, $arg = array()) {
 		$sep = '&';
 	}
 	$postdata = uc_api_requestdata($module, $action, $s);
+	
 	return uc_fopen2(UC_API.'/index.php', 500000, $postdata, '', TRUE, UC_IP, 20);
 }
 
@@ -298,6 +299,7 @@ function uc_friend_ls($uid, $page = 1, $pagesize = 10, $totalnum = 10, $directio
 }
 
 function uc_user_register($username, $password, $email, $questionid = '', $answer = '', $regip = '') {
+	
 	return call_user_func(UC_API_FUNC, 'user', 'register', array('username'=>$username, 'password'=>$password, 'email'=>$email, 'questionid'=>$questionid, 'answer'=>$answer, 'regip' => $regip));
 }
 
@@ -308,18 +310,25 @@ function uc_user_login($username, $password, $isuid = 0, $checkques = 0, $questi
 }
 
 function uc_user_synlogin($uid) {
+	
 	$uid = intval($uid);
+
+	
 	if(@include UC_ROOT.'./data/cache/apps.php') {
 		if(count($_CACHE['apps']) > 1) {
 			$return = uc_api_post('user', 'synlogin', array('uid'=>$uid));
+			
 		} else {
 			$return = '';
 		}
 	}
+	
+
 	return $return;
 }
 
 function uc_user_synlogout() {
+	
 	if(@include UC_ROOT.'./data/cache/apps.php') {
 		if(count($_CACHE['apps']) > 1) {
 			$return = uc_api_post('user', 'synlogout', array());
@@ -327,6 +336,7 @@ function uc_user_synlogout() {
 			$return = '';
 		}
 	}
+	
 	return $return;
 }
 
@@ -364,6 +374,7 @@ function uc_user_getprotected() {
 }
 
 function uc_get_user($username, $isuid=0) {
+	
 	$return = call_user_func(UC_API_FUNC, 'user', 'get_user', array('username'=>$username, 'isuid'=>$isuid));
 	return UC_CONNECT == 'mysql' ? $return : uc_unserialize($return);
 }

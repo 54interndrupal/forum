@@ -34,7 +34,7 @@ define('API_RETURN_FORBIDDEN', '1');
 define('IN_API', true);
 define('CURSCRIPT', 'api');
 
-
+//print_r($_COOKIE);
 if(!defined('IN_UC')) {
 	require_once '../source/class/class_core.php';
 
@@ -57,15 +57,20 @@ if(!defined('IN_UC')) {
 
 	include_once DISCUZ_ROOT.'./uc_client/lib/xml.class.php';
 	$post = xml_unserialize(file_get_contents('php://input'));
-
+	
 	if(in_array($get['action'], array('test', 'deleteuser', 'renameuser', 'gettag', 'synlogin', 'synlogout', 'updatepw', 'updatebadwords', 'updatehosts', 'updateapps', 'updateclient', 'updatecredit', 'getcredit', 'getcreditsettings', 'updatecreditsettings', 'addfeed'))) {
+
 		$uc_note = new uc_note();
+	//print_r($get);
 		echo $uc_note->$get['action']($get, $post);
+	
 		exit();
 	} else {
+		
 		exit(API_RETURN_FAILED);
 	}
 } else {
+
 	exit;
 }
 
@@ -187,10 +192,96 @@ class uc_note {
 		header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
 
 		$cookietime = 31536000;
+		
 		$uid = intval($get['uid']);
+		$username = $get['username'];
+		
+		if($username and $uid==0){
+			
+			 $query = DB::query("SELECT uid FROM ".DB::table('common_member')." WHERE username='$username'");
+                 if($member = DB::fetch($query)) {
+                  		$uid=$member[uid];
+                  }
+       }
+	
+		
+		//$uid=14594;
 		if(($member = getuserbyuid($uid, 1))) {
 			dsetcookie('auth', authcode("$member[password]\t$member[uid]", 'ENCODE'), $cookietime);
-		}
+		}else{
+			
+		 $query = DB::query("SELECT * FROM ".UC_DBTABLEPRE."members WHERE username='$username'");
+                 if($member = DB::fetch($query)) {
+                  		$uid1=$member[uid];
+						$email=$member[email];
+                  } 
+		
+                
+                /* if($member = uc_get_user($username)) {
+	                   list($uid1, $username1, $email) = $member;
+                 }  */
+				 
+				// $uid1=14594;
+				  $username1= $username; 
+				  //$email="aaaaaaa@qq.com";
+				 
+				 
+                 $password = $get['password'];
+                 $ip = $_SERVER['REMOTE_ADDR'];
+                 $time = time();
+    
+                                 
+                 $userdata = array(
+                         'uid' => $uid,
+                         'username' => $username,
+                         'password' => $password,
+                         'email' => $email,
+                         'adminid' => 0,
+                         'groupid' => 10,
+                         'regdate' => $time,
+                         'credits' => 0,
+                         'timeoffset' => 9999
+                 );
+				 
+                 DB::insert('common_member', $userdata);
+                
+                 $status_data = array(
+                         'uid' => $uid,
+                         'regip' => $ip,
+                         'lastip' => $ip,
+                         'lastvisit' => $time,
+                         'lastactivity' => $time,
+                         'lastpost' => 0,
+                         'lastsendmail' => 0,
+                 );
+                 DB::insert('common_member_status', $status_data);
+                 DB::insert('common_member_profile', array('uid' => $uid));
+                 DB::insert('common_member_field_forum', array('uid' => $uid));
+                 DB::insert('common_member_field_home', array('uid' => $uid));
+                 DB::insert('common_member_count', array('uid' => $uid));     
+				 DB::query("UPDATE ".DB::table('common_setting')." SET svalue='$username' WHERE skey='lastmember'");
+				 /*
+				 if(!function_exists('sendmail')) {
+	                include libfile('function/mail');
+                 }
+				 
+				 $idstring = random(6);
+			     $authstr = $_G['setting']['regverify'] == 1 ? "$_G[timestamp]\t2\t$idstring" : '';
+			     DB::query("UPDATE ".DB::table('common_member_field_forum')." SET authstr='$authstr' WHERE uid='$_G[uid]'");
+			     $verifyurl = "{$_G[siteurl]}member.php?mod=activate&amp;uid={$_G[uid]}&amp;id=$idstring";
+			     $email_verify_message = lang('email', 'email_verify_message', array(
+				'username' => $username,
+				'bbname' => 'ÀÏÈËÍø',
+				'siteurl' => $_G['siteurl'],
+				'url' => $verifyurl
+			    ));
+			     sendmail("$username <$email>", lang('email', 'email_verify_subject'), $email_verify_message);
+				 */
+                 $query = DB::query("SELECT uid, username, password FROM ".DB::table('common_member')." WHERE uid='$uid1'");
+                 if($member = DB::fetch($query)) {
+                         dsetcookie('auth', authcode("$member[password]\t$member[uid]", 'ENCODE'), $cookietime);
+                         }
+                 }
 	}
 
 	function synlogout($get, $post) {
@@ -203,6 +294,7 @@ class uc_note {
 		header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
 
 		dsetcookie('auth', '', -31536000);
+		
 	}
 
 	function updatepw($get, $post) {

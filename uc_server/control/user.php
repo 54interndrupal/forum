@@ -30,16 +30,24 @@ class usercontrol extends base {
 
 	// -1 未开启
 	function onsynlogin() {
+		//file_put_contents('test.txt',"bbbb");
 		$this->init_input();
 		$uid = $this->input('uid');
+	
+	
+	
 		if($this->app['synlogin']) {
 			if($this->user = $_ENV['user']->get_user_by_uid($uid)) {
 				$synstr = '';
 				foreach($this->cache['apps'] as $appid => $app) {
+					$tmplink='/';
+					if($app['url']=="http://forum.54intern.com"){
+						$tmplink='/api/';
+					}
 					if($app['synlogin']) {
-						$synstr .= '<script type="text/javascript" src="'.$app['url'].'/api/'.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$this->user['username'].'&uid='.$this->user['uid'].'&password='.$this->user['password']."&time=".$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
+						$synstr .= '<script type="text/javascript" src="'.$app['url'].$tmplink.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$this->user['username'].'&uid='.$this->user['uid'].'&password='.$this->user['password']."&time=".$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>'; /* '<script type="text/javascript"> var sss="action=synlogin&username='.$this->user['username'].'&uid='.$this->user['uid'].'&password='.$this->user['password']."&time=".$this->time."#".$app['authkey'].'";</script>'; */
 						if(is_array($app['extra']['extraurl'])) foreach($app['extra']['extraurl'] as $extraurl) {
-							$synstr .= '<script type="text/javascript" src="'.$extraurl.'/api/'.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$this->user['username'].'&uid='.$this->user['uid'].'&password='.$this->user['password']."&time=".$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
+							$synstr .= '<script type="text/javascript" src="'.$extraurl.$tmplink.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogin&username='.$this->user['username'].'&uid='.$this->user['uid'].'&password='.$this->user['password']."&time=".$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
 						}
 					}
 				}
@@ -50,14 +58,20 @@ class usercontrol extends base {
 	}
 
 	function onsynlogout() {
+		
+
 		$this->init_input();
 		if($this->app['synlogin']) {
 			$synstr = '';
 			foreach($this->cache['apps'] as $appid => $app) {
+				$tmplink='/';
+					if($app['url']=="http://forum.54intern.com"){
+						$tmplink='/api/';
+					}
 				if($app['synlogin']) {
-					$synstr .= '<script type="text/javascript" src="'.$app['url'].'/api/'.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogout&time='.$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
+					$synstr .= '<script type="text/javascript" src="'.$app['url'].$tmplink.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogout&time='.$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
 					if(is_array($app['extra']['extraurl'])) foreach($app['extra']['extraurl'] as $extraurl) {
-						$synstr .= '<script type="text/javascript" src="'.$extraurl.'/api/'.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogout&time='.$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
+						$synstr .= '<script type="text/javascript" src="'.$extraurl.$tmplink.$app['apifilename'].'?time='.$this->time.'&code='.urlencode($this->authcode('action=synlogout&time='.$this->time, 'ENCODE', $app['authkey'])).'" reload="1"></script>';
 					}
 				}
 			}
@@ -67,6 +81,9 @@ class usercontrol extends base {
 	}
 
 	function onregister() {
+		
+		
+
 		$this->init_input();
 		$username = $this->input('username');
 		$password =  $this->input('password');
@@ -81,8 +98,9 @@ class usercontrol extends base {
 		if(($status = $this->_check_email($email)) < 0) {
 			return $status;
 		}
-
+		
 		$uid = $_ENV['user']->add_user($username, $password, $email, 0, $questionid, $answer, $regip);
+		
 		return $uid;
 	}
 

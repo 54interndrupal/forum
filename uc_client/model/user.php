@@ -135,6 +135,17 @@ class usermodel {
 		$this->db->query("INSERT INTO ".UC_DBTABLEPRE."members SET $sqladd username='$username', password='$password', email='$email', regip='$regip', regdate='".$this->base->time."', salt='$salt'");
 		$uid = $this->db->insert_id();
 		$this->db->query("INSERT INTO ".UC_DBTABLEPRE."memberfields SET uid='$uid'");
+	
+	$this->db->query("INSERT INTO `forum`.forumcommon_member_status SET uid='$uid', regip='$regip', lastip='$regip', lastvisit='".$this->base->time."', lastactivity='".$this->base->time."', lastpost='0', lastsendmail='0'");
+	$this->db->query("INSERT INTO `forum`.forumcommon_member_profile SET uid='$uid'");
+	$this->db->query("INSERT INTO `forum`.forumcommon_member_field_forum SET uid='$uid'");
+	$this->db->query("INSERT INTO `forum`.forumcommon_member_field_home SET uid='$uid'");
+	$this->db->query("INSERT INTO `forum`.forumcommon_member_count SET uid='$uid', extcredits1='0', extcredits2='0', extcredits3='0', extcredits4='0', extcredits5='0', extcredits6='0', extcredits7='0', extcredits8='0'");
+	
+	$data = $this->db->fetch_first("SELECT uid FROM `shixiquan`.users order by uid desc");
+	$duid=$data['uid']+1;
+	$this->db->query("INSERT INTO `shixiquan`.users SET uid='".$duid."',name='$username', pass='$password',mail='$email',signature_format='plain_text',created='".$this->base->time."', access= '".$this->base->time."',login='".$this->base->time."',status='1',timezone='Asia/Shanghai', language='zh-hans',picture=0,init='$email'");
+	
 		return $uid;
 	}
 
